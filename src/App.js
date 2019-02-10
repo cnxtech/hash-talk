@@ -21,6 +21,7 @@ class App extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.getRooms = this.getRooms.bind(this);
     this.subscribeToRoom = this.subscribeToRoom.bind(this);
+    this.createRoom = this.createRoom.bind(this);
   }
   componentDidMount(){
     const chatManager = new Chatkit.ChatManager({
@@ -79,6 +80,13 @@ class App extends Component {
        roomId: this.state.roomId
      });
    }
+   createRoom(name){
+    this.currentUser.createRoom({
+      name
+    })
+    .then(room => this.subscribeToRoom(room.id))
+    .catch(error => console.log(`Error in creating room ${error}`));
+   }
   render() {
     return (
       <div className="app">
@@ -88,12 +96,14 @@ class App extends Component {
                 rooms={[...this.state.joinedRooms,...this.state.joinableRooms]}
                 />
                 <MessageList 
+                roomId={this.state.roomId}
                 messages={this.state.messages}
                 />
                 <SendMessageForm 
+                disabled = {!this.state.roomId}
                 sendMessage={this.sendMessage}
                 />
-                <NewRoomForm />
+                <NewRoomForm createRoom = {this.createRoom}/>
       </div>
     );
   }
