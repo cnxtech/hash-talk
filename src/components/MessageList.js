@@ -15,6 +15,15 @@ class MessageList extends React.Component {
         }
     }
     render() {
+        if(!this.props.roomId){
+            return (
+                <div className="message-list">
+                    <div className="join-room">
+                        &larr; Select a #Tag!
+                    </div>
+                </div>
+            );
+        }else{
         return (
             <div className="message-list">
                 {this.props.messages.map((message,index) => {
@@ -24,6 +33,7 @@ class MessageList extends React.Component {
                 })}
             </div>
         );
+    }
     }
 }
 
